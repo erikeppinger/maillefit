@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MailleFit</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="9" cy="9" rx="6" ry="3.6" transform="rotate(35 9 9)"/><ellipse cx="23" cy="9" rx="6" ry="3.6" transform="rotate(35 23 9)"/><ellipse cx="9" cy="23" rx="6" ry="3.6" transform="rotate(35 9 23)"/><ellipse cx="23" cy="23" rx="6" ry="3.6" transform="rotate(35 23 23)"/><ellipse class="c" cx="16" cy="16" rx="6.4" ry="3.9" transform="rotate(-35 16 16)"/></svg>
+    <span>MailleFit</span>
+    <span class="tag">v0.5.3</span>
+  </div>
+  <div class="actions">
+    <input id="projectName" class="name" aria-label="Project name">
+    <div class="seg garment-seg" role="group" aria-label="Garment">
+      <button data-garment="bra">Bra</button>
+      <button data-garment="shirt">Shirt</button>
+      <button data-garment="trousers">Trousers</button>
+    </div>
+    <div class="seg" role="group" aria-label="Units">
+      <button data-units="metric">cm / mm</button>
+      <button data-units="imperial">inch</button>
+    </div>
+    <button id="btnGuide" class="primary" title="Step-by-step guide">Guide</button>
+    <button id="btnClientForm" title="Download a form the client fills in and sends back">Client form</button>
+    <button id="btnNew" title="Start over with defaults">New</button>
+    <button id="btnOpen" title="Open a saved project or a client measurements file">Open…</button>
+    <button id="btnSave">Save file</button>
+    <button id="btnPrint">Print</button>
+    <input type="file" id="fileOpen" accept=".json,application/json" hidden>
+  </div>
+</header>
+
+<main class="layout">
+  <form id="form" class="inputs" autocomplete="off" onsubmit="return false">
+
+    <details open class="only-bra">
+      <summary>1 · Client measurements <button type="button" class="help-btn" data-help="client" aria-label="Help" title="Help">?</button></summary>
+      <div class="help-box" data-help-box="client" hidden></div>
+      <p class="hint">Soft tape only — a client can do this alone in front of a mirror. First stick four small dots (tape or washable marker) on each breast, then measure between the dots over the skin. Stand upright, arms relaxed, tape snug but not pulling. Click a field or a number to see it in the drawing.</p>
+      <div class="guide-wrap"><svg id="guide" viewBox="0 0 400 300" role="img" aria-label="Measurement guide: dots T, S, C, M and the lengths between them"></svg></div>
+      <ol id="points" class="points"></ol>
+      <div id="guideHow" class="info how"></div>
+      <label class="check"><input type="checkbox" data-path="client.separateSides" data-kind="bool"> Measure left and right cup separately <span class="unit">(L / R = client's left / right)</span></label>
+      <label class="inline">Gap between the cups (6-in-1 bridge):
+        <select data-path="client.gapFrom" data-kind="text">
+          <option value="nipples">work out from nipple to nipple</option>
+          <option value="measured">measured between the two C dots</option>
+        </select>
+      </label>
+      <div id="measureList" class="grid"></div>
+    </details>
+
+    <details open class="only-garment">
+      <summary><span id="gTitle">1 · Body measurements</span> <button type="button" class="help-btn" data-help="garment" aria-label="Help" title="Help">?</button></summary>
+      <div class="help-box" data-help-box="garment" hidden></div>
+      <p class="hint">Soft tape, over thin clothing or the gambeson that will be worn under the mail. Girths snug but not pulling — ease is added under Construction. Click a field or a number to see it in the drawing.</p>
+      <div class="guide-wrap"><svg id="gGuide" role="img" aria-label="Measurement guide"></svg></div>
+      <div id="gHow" class="info how"></div>
+      <div id="gMeasureList" class="grid"></div>
+    </details>
+
+    <details open>
+      <summary>2 · Rings <button type="button" class="help-btn" data-help="rings" aria-label="Help" title="Help">?</button></summary>
+      <div class="help-box" data-help-box="rings" hidden></div>
+      <div class="ringset" data-set="main">
+        <h3 id="mainRingTitle">Cup panels — European 4-in-1</h3>
+        <div class="grid" data-ringfields="main"></div>
+        <div class="info" data-ringinfo="main"></div>
+      </div>
+      <div class="ringset only-bra" data-set="seam">
+        <h3>Stitch connectors — 4-in-1 style</h3>
+        <label class="check"><input type="checkbox" data-path="rings.seam.same" data-kind="bool"> Same rings as the panels</label>
+        <div class="grid" data-ringfields="seam"></div>
+        <div class="info" data-ringinfo="seam"></div>
+      </div>
+      <div class="ringset only-bra" data-set="support">
+        <h3>Neckline, straps &amp; bands — European 6-in-1</h3>
+        <label class="check"><input type="checkbox" data-path="rings.support.same" data-kind="bool"> Same rings as the panels</label>
+        <div class="grid" data-ringfields="support"></div>
+        <div class="info" data-ringinfo="support"></div>
+      </div>
+      <div class="preset-tools">
+        <span class="muted">My presets:</span>
+        <button type="button" id="presetExport">Export…</button>
+        <button type="button" id="presetImport">Import…</button>
+        <input type="file" id="presetFile" accept=".json,application/json" hidden>
+      </div>
+    </details>
+
+    <details>
+      <summary>3 · Swatch calibration <button type="button" class="help-btn" data-help="calib" aria-label="Help" title="Help">?</button></summary>
+      <div class="help-box" data-help-box="calib" hidden></div>
+      <p class="hint">Weave a small swatch with the real rings and let it hang relaxed. <b>Along a row</b>: rings leaning the same way, side by side. <b>Rows</b>: count row after row across. Measure centre of the first ring to centre of the last.</p>
+      <label class="check"><input type="checkbox" data-path="calibration.main.enabled" data-kind="bool"> E4-1 panel swatch</label>
+      <div class="grid calib" data-calib="main">
+        <label>Rings along a row<input data-path="calibration.main.alongCount" data-kind="int"></label>
+        <label>…measured length<input data-path="calibration.main.alongLength" data-kind="ring"></label>
+        <label>Rows counted<input data-path="calibration.main.acrossCount" data-kind="int"></label>
+        <label>…measured length<input data-path="calibration.main.acrossLength" data-kind="ring"></label>
+      </div>
+      <div id="pitchMain" class="info"></div>
+      <label class="check only-bra"><input type="checkbox" data-path="calibration.support.enabled" data-kind="bool"> E6-1 strip</label>
+      <div class="grid calib only-bra" data-calib="support">
+        <label>Rings along one row<input data-path="calibration.support.alongCount" data-kind="int"></label>
+        <label>…measured length<input data-path="calibration.support.alongLength" data-kind="ring"></label>
+      </div>
+      <div id="pitchSupport" class="info only-bra"></div>
+    </details>
+
+    <details open class="only-bra">
+      <summary>4 · Construction <button type="button" class="help-btn" data-help="construction" aria-label="Help" title="Help">?</button></summary>
+      <div class="help-box" data-help-box="construction" hidden></div>
+      <label class="check"><input type="checkbox" data-path="construction.straps" data-kind="bool"> E6-1 shoulder straps from T, O-ring + ribbon tie at the back</label>
+      <label class="check"><input type="checkbox" data-path="construction.sideBand" data-kind="bool"> E6-1 side bands from S to the back, laced with ribbon</label>
+      <label class="check"><input type="checkbox" data-path="construction.frame" data-kind="bool"> E6-1 edging along the side and bottom cup edges</label>
+      <div class="grid">
+        <label>E6-1 rows (neckline, straps, bands)<input data-path="construction.supportRows" data-kind="int"></label>
+        <label>Stitch rows<input data-path="construction.stitchRows" data-kind="int"></label>
+        <label>Edging rows<input data-path="construction.frameRows" data-kind="int"></label>
+        <label class="wide">Bridge between the cups
+          <select data-path="construction.bridgeStyle" data-kind="text">
+            <option value="auto">automatic — one ring for a tiny gap, else odd vertical rows</option>
+            <option value="rows">vertical rows of 6-in-1 (odd number)</option>
+            <option value="ring">one connecting ring</option>
+          </select>
+        </label>
+        <label>Cup ease %<input data-path="construction.cupEase" data-kind="num"></label>
+        <label>Gap at the back (ribbon)<input data-path="construction.backGap" data-kind="ring"></label>
+        <label>O-ring inner diameter<input data-path="construction.oRingId" data-kind="ring"></label>
+        <label>Ribbon per tie<input data-path="construction.bowAllowance" data-kind="ring"></label>
+        <label>Spare rings %<input data-path="construction.spare" data-kind="num"></label>
+      </div>
+    </details>
+    <details open class="only-garment">
+      <summary><span id="gConsTitle">4 · Construction</span></summary>
+      <div id="gConstruction" class="grid"></div>
+      <div class="grid" style="margin-top:8px"><label>Spare rings %<input data-path="construction.spare" data-kind="num"></label></div>
+    </details>
+  </form>
+
+  <section class="results" aria-live="polite">
+    <div id="cards" class="cards"></div>
+    <div id="warnings"></div>
+    <div class="panel two only-bra">
+      <div>
+        <h2>Pattern <small>flat, from the front · 6-in-1 bridge between the two C corners</small></h2>
+        <svg id="pattern" role="img" aria-label="Flat cup pattern"></svg>
+        <div class="legend">
+          <span><i class="dot pa"></i>upper triangle</span>
+          <span><i class="dot pb"></i>lower triangle</span>
+          <span><i class="dot seam"></i>stitch</span>
+          <span><i class="dot e6"></i>E6-1</span>
+          <span><i class="line edge"></i>triangle outline</span>
+        </div>
+      </div>
+      <div>
+        <h2>Order list</h2>
+        <table id="orderList" class="tbl"></table>
+        <h2>Pieces</h2>
+        <table id="pieces" class="tbl"></table>
+        <h2>Body &amp; fit</h2>
+        <table id="geometry" class="tbl"></table>
+      </div>
+    </div>
+    <div class="panel only-bra">
+      <div class="panel-head">
+        <h2>Cup, row by row <small id="rowsNote"></small></h2>
+        <div id="rowsTabs" class="seg" role="group" aria-label="Which cup" hidden>
+          <button type="button" data-side="left">Left cup</button>
+          <button type="button" data-side="right">Right cup</button>
+        </div>
+      </div>
+      <table id="rows" class="tbl rounds"></table>
+    </div>
+    <p class="foot only-bra">Estimates: each triangle is fixed by its three measured edge lengths; laid flat, the angle missing at M is the fold the stitch closes, which curves the cup. Panels are E4-1 in rows parallel to the stitch. Default ring spacing is scaled from one published E4-1 swatch (AR 5.5); the E6-1 spacing is a rough guess. Calibrate both with a swatch before ordering rings.</p>
+    <div class="panel only-garment">
+      <div>
+        <h2>Pattern <small>pieces laid flat, tubes at half their girth · hover to see a piece</small></h2>
+        <svg id="gPattern" role="img" aria-label="Garment pieces laid flat"></svg>
+        <div class="legend">
+          <span><i class="swatch tex"></i><span id="gTexLabel">4-in-1 at true scale</span></span>
+          <span><i class="line station"></i>measured point · rings in that round</span>
+          <span><i class="dot con"></i>ring removed</span>
+          <span><i class="dot exp"></i>ring added</span>
+          <span><i class="swatch gus"></i>gusset</span>
+        </div>
+      </div>
+    </div>
+    <div class="panel two only-garment">
+      <div>
+        <h2>Order list</h2>
+        <table id="gOrder" class="tbl"></table>
+        <h2>Pieces</h2>
+        <table id="gPieces" class="tbl"></table>
+      </div>
+      <div>
+        <h2>Fit</h2>
+        <table id="gFit" class="tbl"></table>
+      </div>
+    </div>
+    <div class="panel only-garment">
+      <h2>Round by round <small>each tube is woven in closed rounds</small></h2>
+      <div id="gRounds" class="rounds-text"></div>
+    </div>
+    <div class="panel" id="sources">
+      <h2>Sources</h2>
+      <ol id="sourceList" class="sources"></ol>
+      <h3>Our own estimates (no published source)</h3>
+      <ul id="unsourcedList" class="sources"></ul>
+    </div>
+  </section>
+</main>
+
+<dialog id="guideDialog" aria-labelledby="guideTitle">
+  <form method="dialog">
+    <h2 id="guideTitle">How to design a bra with this tool</h2>
+    <ol id="guideSteps" class="guide-steps"></ol>
+    <p class="muted">Every section also has a <b>?</b> button with details.</p>
+    <button class="primary">Got it</button>
+  </form>
+</dialog>
+
+<script type="module" src="src/ui/app.js"></script>
+</body>
+</html>

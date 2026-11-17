@@ -1,0 +1,16 @@
+{
+  "name": "maillefit",
+  "version": "0.5.3",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node serve.mjs",
+    "test": "node --test test/*.test.mjs",
+    "build:web": "node scripts/build-web.mjs",
+    "desktop:dev": "tauri dev",
+    "desktop:build": "tauri build"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.12.0"
+  }
+}
