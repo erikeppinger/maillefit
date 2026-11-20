@@ -63,7 +63,7 @@ export const DEFAULT_PROJECT = {
   },
 };
 
-const SET_NAMES = { main: 'Panel rings (E4-1)', seam: 'Stitch connectors', support: 'E6-1 rings' };
+const SET_NAMES = { main: 'Cup rings (4-in-1)', seam: 'Stitch rings', support: '6-in-1 rings' };
 
 function ringSet(project, key) {
   const r = project.rings[key];
@@ -89,7 +89,7 @@ export function computeBra(project) {
     s.weave = key === 'support' ? WEAVES.e61 : WEAVES.e41;
     s.verdict = arVerdict(s.stats.ar, s.weave);
     if (s.verdict.level === 'bad' && !(key === 'seam' && s.same)) {
-      warnings.push(`${SET_NAMES[key]}: AR ${s.stats.ar.toFixed(2)} for ${s.weave.name}: ${s.verdict.text}.`);
+      warnings.push(`${SET_NAMES[key]} won’t work for ${s.weave.name}: aspect ratio ${s.stats.ar.toFixed(2)} is ${s.verdict.text}. Choose thinner wire or a larger inner diameter.`);
     }
     sets[key] = s;
   }
@@ -111,12 +111,12 @@ export function computeBra(project) {
     const { cup } = cups[side];
     const who = client.separateSides ? `${SIDE_NAMES[side]} cup: ` : '';
     const L = cup.layout;
-    if (L.problems.includes('lower')) warnings.push(`${who}the lower triangle can't close — fold S→C, neckline M→C and stitch S→M don't form a triangle (one is longer than the other two together). Re-measure.`);
-    if (L.problems.includes('upper')) warnings.push(`${who}the upper triangle can't close — side T→S, neckline T→M and stitch S→M don't form a triangle. Re-measure.`);
-    if (!L.problems.length && L.dartDeg <= 2) warnings.push(`${who}the triangles lie flat (no angle left at M), so the cup gets no curve. Usually the neckline lengths T→M / M→C are measured too long or the stitch too short.`);
-    if (L.dartDeg > 75) warnings.push(`${who}very deep fold at M (${Math.round(L.dartDeg)}°) — check the neckline lengths; the stitch may bunch up.`);
+    if (L.problems.includes('lower')) warnings.push(`${who}the lower triangle doesn’t fit together: one of the lengths S → C, M → C and S → M is longer than the other two added up. Please measure these three again.`);
+    if (L.problems.includes('upper')) warnings.push(`${who}the upper triangle doesn’t fit together: one of the lengths T → S, T → M and S → M is longer than the other two added up. Please measure these three again.`);
+    if (!L.problems.length && L.dartDeg <= 2) warnings.push(`${who}the measurements give a flat cup with no curve. Usually the neckline lengths T → M and M → C were measured too long, or the stitch S → M too short.`);
+    if (L.dartDeg > 75) warnings.push(`${who}the cup comes out very deep (fold at M ${Math.round(L.dartDeg)}°), so the stitch may bunch up. Check the neckline lengths T → M and M → C.`);
     const dev = (cup.rings - cup.ringsByArea) / cup.ringsByArea;
-    if (Math.abs(dev) > 0.12) warnings.push(`${who}row-by-row count differs ${Math.round(dev * 100)}% from the area estimate — the rings are coarse for this cup size.`);
+    if (Math.abs(dev) > 0.12) warnings.push(`${who}the rings are large for a cup this size, so the ring count may be off by about ${Math.round(Math.abs(dev) * 100)}%. Smaller rings give a smoother cup.`);
   }
   const both = fn => SIDES.reduce((n, s) => n + fn(cups[s]), 0);
   const perCup = fn => (client.separateSides ? `L ${fn(cups.left)} / R ${fn(cups.right)}` : `${fn(cups.left)} each`);
@@ -133,7 +133,7 @@ export function computeBra(project) {
   const gapFromNipples = (client.apexToApex || 0) - reach(cups.left) - reach(cups.right);
   const wanted = client.gapFrom === 'measured' ? Math.max(0, client.centreGap || 0) : gapFromNipples;
   if (client.gapFrom !== 'measured' && gapFromNipples < 0) {
-    warnings.push(`Nipple to nipple (${(client.apexToApex / 10).toFixed(1)} cm) is narrower than the two cups reach from M to C — the cups touch and there is no bridge. Check nipple to nipple and neckline M → C.`);
+    warnings.push('Nipple to nipple is shorter than the two cups reach towards the middle, so the cups touch and there is no bridge. Check the nipple-to-nipple distance and the neckline lengths M → C.');
   }
   // The bridge (as in the reference bra, the neckline bands run on into each
   // other at the bottom) is either one connecting ring, or vertical rows of
@@ -158,7 +158,7 @@ export function computeBra(project) {
   const gap = bridge.length;
   const bases = both(x => x.e.fold);
   const sideLength = (client.underbust - c.backGap - bases - gap) / 2;
-  if (c.sideBand && sideLength <= 0) warnings.push('The two cup bottoms plus the back gap already exceed the underbust — no room for side bands. Re-check fold S→C and the underbust.');
+  if (c.sideBand && sideLength <= 0) warnings.push('The two cup bottoms plus the gap at the back are already longer than the underbust, so there is no room for side bands. Check the fold S → C and the underbust.');
   const sideOne = c.sideBand ? strip(Math.max(0, sideLength), c.supportRows, supportPitch) : strip(0, c.supportRows, supportPitch);
   const sidesBand = { ...sideOne, rings: sideOne.rings * 2 };
   const frame = c.frame ? strip(both(x => x.cup.free), c.frameRows, supportPitch) : strip(0, c.frameRows, supportPitch);
@@ -171,17 +171,17 @@ export function computeBra(project) {
   const bustMinusUnder = client.fullBust - client.underbust;
   const letters = ['AA', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
   const cupLetter = letters[Math.min(letters.length - 1, Math.max(0, Math.floor((bustMinusUnder / 10 - 10) / 2)))];
-  if (client.highBust > client.fullBust) warnings.push('Chest girth above the breasts is larger than the bust girth — please re-check both.');
+  if (client.highBust > client.fullBust) warnings.push('The chest girth above the breasts is larger than the bust girth. Please measure both again.');
 
   // --- pieces and order list -------------------------------------------------
   const pieces = [
     { key: 'panels', label: 'Cup triangles (2 per cup)', set: 'main', rings: both(x => x.cup.rings), layout: perCup(x => x.cup.triangles.map(t => t.rows.length).join(' + ') + ' rows') },
-    { key: 'stitch', label: 'Stitch connectors', set: 'seam', rings: both(x => x.cup.stitch.rings), layout: perCup(x => x.cup.stitch.rings) },
-    { key: 'neckline', label: 'E6-1 neckline, both cups', set: 'support', rings: neckline.rings, layout: `${neckline.rows} rows × ${neckline.perRow}` },
-    { key: 'bridge', label: 'E6-1 bridge between the cups', set: 'support', rings: bridge.rings, layout: bridge.style === 'rows' ? `${bridge.vertical} vertical rows × ${bridge.rows} rings` : bridge.style === 'ring' ? 'one connecting ring' : 'cups touch' },
-    { key: 'straps', label: 'E6-1 shoulder straps (×2)', set: 'support', rings: straps.rings, layout: straps.rings ? `${straps.rows} rows × ${straps.perRow} each` : 'off' },
-    { key: 'sides', label: 'E6-1 side bands (×2)', set: 'support', rings: sidesBand.rings, layout: sidesBand.rings ? `${sidesBand.rows} rows × ${sidesBand.perRow} each` : 'off' },
-    { key: 'frame', label: 'E6-1 edging (side + bottom)', set: 'support', rings: frame.rings, layout: frame.rings ? `${frame.rows} row × ${frame.perRow}` : 'off' },
+    { key: 'stitch', label: 'Stitch rings', set: 'seam', rings: both(x => x.cup.stitch.rings), layout: perCup(x => x.cup.stitch.rings) },
+    { key: 'neckline', label: '6-in-1 neckline, both cups', set: 'support', rings: neckline.rings, layout: `${neckline.rows} rows × ${neckline.perRow}` },
+    { key: 'bridge', label: '6-in-1 bridge between the cups', set: 'support', rings: bridge.rings, layout: bridge.style === 'rows' ? `${bridge.vertical} vertical rows × ${bridge.rows} rings` : bridge.style === 'ring' ? 'one connecting ring' : 'cups touch' },
+    { key: 'straps', label: '6-in-1 shoulder straps (×2)', set: 'support', rings: straps.rings, layout: straps.rings ? `${straps.rows} rows × ${straps.perRow} each` : 'off' },
+    { key: 'sides', label: '6-in-1 side bands (×2)', set: 'support', rings: sidesBand.rings, layout: sidesBand.rings ? `${sidesBand.rows} rows × ${sidesBand.perRow} each` : 'off' },
+    { key: 'frame', label: '6-in-1 edging (side + bottom)', set: 'support', rings: frame.rings, layout: frame.rings ? `${frame.rows} row × ${frame.perRow}` : 'off' },
   ];
 
   const order = [];

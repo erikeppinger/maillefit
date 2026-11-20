@@ -78,7 +78,7 @@ test('"same as panels" merges ring sets; E6-1 below AR 4.25 is flagged', () => {
   p.rings.main.id = 5.0; // AR 3.9: fine for E4-1 per M.A.I.L., below the E6-1 minimum
   const r = computeBra(p);
   assert.equal(r.order.length, 1);
-  assert.ok(r.warnings.some(w => w.includes('E6-1')));
+  assert.ok(r.warnings.some(w => w.includes('6-in-1')));
 });
 
 test('left and right cups measured separately', () => {

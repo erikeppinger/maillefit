@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MailleFit Manual</title>
+<meta name="description" content="How to plan a chainmail bra, shirt or trousers with MailleFit: measuring, choosing rings, weaving a swatch and reading the results.">
+<link rel="stylesheet" href="css/app.css">
+<style>
+  body { font-size: 15px; line-height: 1.6; }
+  .manual { max-width: 760px; margin: 0 auto; padding: 16px 16px 64px; }
+  .manual header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin: 8px 0 20px; }
+  .manual h1 { font-size: 26px; margin: 0; }
+  .manual h2 { font-size: 19px; margin: 36px 0 8px; padding-top: 8px; border-top: 1px solid var(--line); }
+  .manual h3 { font-size: 15.5px; margin: 20px 0 4px; }
+  .manual p, .manual li { max-width: 68ch; }
+  .manual li { margin: 4px 0; }
+  .manual nav.toc { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 16px; }
+  .manual nav.toc ol { margin: 4px 0; padding-left: 20px; columns: 2 220px; }
+  .manual a { color: var(--accent); }
+  .manual .tip { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line)); border-radius: 8px; padding: 8px 12px; }
+  .manual dl.glossary dd { margin-bottom: 6px; }
+  .manual table { border-collapse: collapse; margin: 8px 0; }
+  .manual th, .manual td { text-align: left; border-bottom: 1px solid var(--line); padding: 4px 12px 4px 0; vertical-align: top; }
+  @media print { .manual header a { display: none; } .manual h2 { break-after: avoid; } }
+</style>
+</head>
+<body>
+<main class="manual">
+  <header>
+    <h1>MailleFit manual</h1>
+    <a class="btn" href="index.html" id="back">← Back to MailleFit</a>
+  </header>
+
+  <p>MailleFit plans chainmail garments from body measurements. It tells you how many rings to buy, what the garment weighs, what the pieces look like laid flat, and how to weave them row by row or round by round. It covers a bra, a shirt and trousers.</p>
+  <p>Everything runs on your own computer or in your browser. Nothing you enter is uploaded; your project is kept in the browser until you save it as a file.</p>
+
+  <nav class="toc" aria-label="Contents">
+    <b>Contents</b>
+    <ol>
+      <li><a href="#start">Getting started</a></li>
+      <li><a href="#measure-bra">Measuring for the bra</a></li>
+      <li><a href="#measure-shirt">Measuring for a shirt</a></li>
+      <li><a href="#measure-trousers">Measuring for trousers</a></li>
+      <li><a href="#client">Letting the client measure</a></li>
+      <li><a href="#rings">Choosing rings</a></li>
+      <li><a href="#swatch">Weaving a swatch</a></li>
+      <li><a href="#construction">Construction choices</a></li>
+      <li><a href="#results">Reading the results</a></li>
+      <li><a href="#files">Saving, printing and files</a></li>
+      <li><a href="#limits">How exact is it?</a></li>
+      <li><a href="#words">Words used</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="start">1. Getting started</h2>
+  <ol>
+    <li>Choose <b>Bra</b>, <b>Shirt</b> or <b>Trousers</b> at the top, and <b>cm / mm</b> or <b>inch</b>.</li>
+    <li>Fill in the body measurements (section 1), or load a file your client sent you with <b>Open…</b>.</li>
+    <li>Choose your rings (section 2).</li>
+    <li>If you have the rings already, weave a small test piece and enter it under <b>Swatch calibration</b> (section 3).</li>
+    <li>Pick the details under <b>Construction</b> (section 4).</li>
+    <li>Read the results on the right; they update as you type.</li>
+  </ol>
+  <p>The <b>Guide</b> button shows these steps for the garment you are working on. Each section has a <b>?</b> button with more detail. Words with a dotted underline are explained when you point at them; clicking one opens the list of words.</p>
+
+  <h2 id="measure-bra">2. Measuring for the bra</h2>
+  <p>Each cup is made of two flat triangles of 4-in-1, joined along a seam (the <i>stitch</i>). Because the two triangles meet at an angle, the cup curves. Two rows of 6-in-1 run along the neckline, carry on over the shoulders as straps, and meet in the middle as the bridge between the cups.</p>
+  <h3>The four dots</h3>
+  <p>You only need a soft tape, a mirror and something to mark four dots on each breast — small pieces of tape or a washable marker:</p>
+  <table>
+    <tbody>
+    <tr><th>T</th><td>top of the cup at the side — at the outer edge of the breast, just below the armpit, where the strap will start</td></tr>
+    <tr><th>S</th><td>bottom of the cup at the side — straight below T, where the fold under the breast ends</td></tr>
+    <tr><th>C</th><td>inner bottom corner — in the fold under the breast, next to the breastbone</td></tr>
+    <tr><th>M</th><td>straight below the nipple, on an imagined line from T down to C</td></tr>
+    </tbody>
+  </table>
+  <h3>The lengths</h3>
+  <p>Measure over the skin, following its shape, tape snug but not pulling:</p>
+  <ul>
+    <li><b>T → S</b> down the side, <b>S → C</b> along the fold under the breast — the outer and bottom edges of the cup.</li>
+    <li><b>T → M</b> and <b>M → C</b> — the neckline, where the 6-in-1 runs.</li>
+    <li><b>S → M</b> across the breast just under the nipple — the stitch.</li>
+    <li><b>Nipple to nipple</b>, with the tape held straight. The tool works out the gap between the cups from this.</li>
+    <li>Three girths (under the breasts, above them, over the nipples) and the <b>strap length</b> from T over the shoulder to where it should end at the back.</li>
+  </ul>
+  <p>If the breasts differ noticeably, tick <b>Measure left and right cup separately</b>. L and R always mean the wearer’s left and right.</p>
+  <div class="tip">Click a measurement field or a number in the drawing: the line lights up and the tool tells you how to take it. If the measurements don’t fit together, a yellow box says which ones to check.</div>
+  <h3>The gap between the cups</h3>
+  <p>By default the gap is nipple to nipple minus how far each cup reaches from C to M. If you would rather measure it directly, choose <b>measured between the two C dots</b> and enter that distance. The gap is filled by one ring if it is tiny, otherwise by short vertical rows of 6-in-1 — always an odd number, so the pattern stays symmetrical. You can force one or the other under Construction.</p>
+
+  <h2 id="measure-shirt">3. Measuring for a shirt</h2>
+  <p>Measure over whatever will be worn under the mail, such as a shirt or a padded jacket. Measure the body as it is — the extra room to move (<i>ease</i>) is added under Construction. A helper makes the back and arm lengths easier.</p>
+  <ul>
+    <li><b>Girths</b>: chest, where the hem will sit, upper arm, elbow, wrist and neck.</li>
+    <li><b>Lengths</b>: shoulder to hem, armhole depth (top of the shoulder down to armpit level), sleeve length and shoulder to elbow. Enter 0 for the sleeve length to get a sleeveless shirt.</li>
+  </ul>
+
+  <h2 id="measure-trousers">4. Measuring for trousers</h2>
+  <ul>
+    <li><b>Girths</b>: waist (where the trousers will sit), hips and seat at the fullest part, thigh, knee and ankle.</li>
+    <li><b>Lengths</b>: outside leg from waist to ankle, inside leg from crotch to ankle, crotch to knee, and waist down to the fullest part of the hips.</li>
+  </ul>
+  <p>The difference between the outside and inside leg is the <i>rise</i> — how far the waist sits above the crotch.</p>
+
+  <h2 id="client">5. Letting the client measure</h2>
+  <p>Click <b>Client form</b>. MailleFit saves a small web page for the garment you are working on, with the drawing, the instructions and the fields. Send it to your client; it opens in any browser and needs no internet.</p>
+  <p>The client fills it in and clicks <b>Save measurements file</b>, which saves a file like <code>measurements-shirt-Name.json</code>. They send that back, and you load it with <b>Open…</b>. Only the measurements are replaced; your ring and construction choices stay as they were. Notes the client wrote, such as a nickel allergy, are shown when you open the file.</p>
+
+  <h2 id="rings">6. Choosing rings</h2>
+  <p>A ring is described by the thickness of its wire (<i>wire diameter</i>, WD) and the size of its hole (<i>inner diameter</i>, ID). Pick one of the presets, or enter both numbers yourself. If your seller lists wire by gauge, the gauge list fills in the wire diameter for you.</p>
+  <p>The ratio of the two — inner diameter ÷ wire diameter, the <i>aspect ratio</i> (AR) — decides whether a weave fits together and how it feels:</p>
+  <table>
+    <thead><tr><th>Weave</th><th>Aspect ratio</th><th>What to expect</th></tr></thead>
+    <tbody>
+    <tr><td>4-in-1</td><td>below 2.83</td><td>won’t close</td></tr>
+    <tr><td></td><td>2.83 – 4</td><td>tight and stiff</td></tr>
+    <tr><td></td><td>4 – 6</td><td>the usual range for clothing</td></tr>
+    <tr><td></td><td>above 6</td><td>more open and stretchy</td></tr>
+    <tr><td>6-in-1</td><td>below 4.25</td><td>too tight to work</td></tr>
+    <tr><td></td><td>4.25 – 6.5</td><td>firm to open; about 4.9 is ideal</td></tr>
+    </tbody>
+  </table>
+  <p>These ranges come from published sources, listed at the bottom of the tool. For the bra, the stitch rings and the 6-in-1 parts can use different rings from the cups; tick <b>Same rings as the panels</b> to use one size for everything.</p>
+  <p>Sizes you use often can be kept with <b>Save preset</b>. <b>Export…</b> and <b>Import…</b> move your presets to another computer or to the desktop app.</p>
+
+  <h2 id="swatch">7. Weaving a swatch</h2>
+  <p>To turn centimetres into rings, the tool needs to know how much space one ring takes in the finished weave. It starts from an estimate based on one published 4-in-1 swatch — but rings, metals and weaving hands differ. A short test is worth it before you order thousands of rings:</p>
+  <ol>
+    <li>Weave a piece of 4-in-1 of at least 10 × 10 rings with the real rings.</li>
+    <li>Lay it flat and smooth it out without stretching.</li>
+    <li><b>Along a row</b>: count the rings leaning the same way side by side, and measure from the centre of the first to the centre of the last.</li>
+    <li><b>Rows</b>: count the rows and measure across them the same way.</li>
+    <li>Tick <b>I have a 4-in-1 swatch</b> under Swatch calibration and enter the four numbers.</li>
+  </ol>
+  <p>For the bra’s 6-in-1, weave a short strip and enter the rings and length along it. All counts then follow your rings.</p>
+
+  <h2 id="construction">8. Construction choices</h2>
+  <h3>Bra</h3>
+  <ul>
+    <li><b>Straps, side bands, edging</b>: switch each part of the 6-in-1 on or off.</li>
+    <li><b>6-in-1 rows</b>: how wide the neckline, straps and side bands are (2 rows in the original design).</li>
+    <li><b>Stitch rows</b>: how many rows of rings join the two triangles of a cup.</li>
+    <li><b>Bridge between the cups</b>: automatic, vertical rows, or one connecting ring.</li>
+    <li><b>Extra cup size</b>: makes the cups a little larger than measured.</li>
+    <li><b>Gap at the back, O-ring size, ribbon</b>: the closure at the back and the bows on the straps.</li>
+  </ul>
+  <h3>Shirt</h3>
+  <ul>
+    <li><b>Sleeves</b>: <i>T-style</i> is the most common mail shirt — the weave runs the same way everywhere and there are no seams. <i>45° sleeves</i> turn the weave on the sleeves; that needs four short seams at the shoulders but tapers more neatly.</li>
+    <li><b>Ease</b>: extra width over the body measurement so you can move. The defaults (15 cm / 6″ on the body, 10 cm / 4″ on the sleeves) follow a published calculator.</li>
+    <li><b>Back wider than front</b>: usually about 10 cm (4″), so you can reach forward.</li>
+    <li><b>Gussets</b>: small extra pieces in the armpits and at the elbows for movement.</li>
+    <li><b>Collar</b>: a standing collar, with its height and how much looser than the neck it is.</li>
+  </ul>
+  <h3>Trousers</h3>
+  <ul>
+    <li><b>Legs only</b> makes chausses: two separate legs that hang from a belt.</li>
+    <li>Otherwise the seat is one tube from the waist to the crotch, and a diamond-shaped gusset fills the crotch where the legs need more room than the seat gives. Its size is our own estimate — check it on the body.</li>
+  </ul>
+  <p>For every garment, <b>Spare rings</b> adds a percentage to the order for rings that get lost or bent.</p>
+
+  <h2 id="results">9. Reading the results</h2>
+  <ul>
+    <li><b>Cards at the top</b>: rings to order, finished weight, whether the rings suit their weave, and for the bra an approximate cup size.</li>
+    <li><b>Yellow boxes</b>: something doesn’t fit together — usually a measurement to take again. The box says which.</li>
+    <li><b>Order list</b>: how many rings of each size to buy, including spares, with weight and wire length.</li>
+    <li><b>Pieces</b>: what is made of how many rings.</li>
+    <li><b>Pattern</b>: the pieces laid flat. For the bra, point at a row in the row table to find it in the drawing. For shirt and trousers, the rings in the drawing may be shown larger than real so the pattern stays visible.</li>
+    <li><b>Cup, row by row</b> (bra): each triangle starts along the stitch and gets shorter towards its corner. “−2 at the neckline” means: leave out two rings at the neckline end of this row.</li>
+    <li><b>Round by round</b> (shirt, trousers): sleeves, body and legs are woven as tubes, one closed round after another. “Rounds 1–40: 96 → 80 rings (leave out 1 ring about every 3 rounds)” tells you how quickly to narrow the tube.</li>
+  </ul>
+
+  <h2 id="files">10. Saving, printing and files</h2>
+  <ul>
+    <li>Your current project is remembered by the browser (or the desktop app) between visits.</li>
+    <li><b>Save file</b> writes the whole project as a small <code>.json</code> file — keep it as a backup or to move it to another computer. <b>Open…</b> loads it again.</li>
+    <li><b>Print</b> gives a clean sheet with the results for the workbench.</li>
+    <li><b>New</b> starts over with the default values.</li>
+  </ul>
+  <p>The desktop app for Windows does the same as the web version, with its own Save dialogs. It is available from the <a href="https://github.com/erikeppinger/maillefit/releases">releases page</a>.</p>
+
+  <h2 id="limits">11. How exact is it?</h2>
+  <p>MailleFit gives a well-founded estimate, not a guarantee. In particular:</p>
+  <ul>
+    <li>The ring spacing for 4-in-1 comes from one published swatch; for 6-in-1 it is a rough guess. A swatch of your own replaces both.</li>
+    <li>The bra model — flat triangles joined at an angle — follows one real bra and has not yet been checked against many fitted garments.</li>
+    <li>Ring counts per area agree with published tables to within about 16%, and the shirt’s area with a published calculator to within 5%.</li>
+  </ul>
+  <p>Every published figure in the tool is numbered and listed under <b>Sources</b> at the bottom of the page, with a short quote. Our own estimates are listed separately.</p>
+
+  <h2 id="words">12. Words used</h2>
+  <div id="glossary"></div>
+  <noscript><p>The list of words needs JavaScript.</p></noscript>
+</main>
+<script type="module">
+  import { glossaryHtml } from './src/ui/glossary.js';
+  document.getElementById('glossary').innerHTML = glossaryHtml();
+  if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+</script>
+</body>
+</html>

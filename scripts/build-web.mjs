@@ -6,5 +6,5 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const dist = root + 'dist';
 await rm(dist, { recursive: true, force: true });
 await mkdir(dist);
-for (const item of ['index.html', 'css', 'src']) await cp(root + item, `${dist}/${item}`, { recursive: true });
+for (const item of ['index.html', 'manual.html', 'css', 'src']) await cp(root + item, `${dist}/${item}`, { recursive: true });
 console.log('web app copied to dist/');

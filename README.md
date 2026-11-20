@@ -26,7 +26,7 @@ npm run desktop:dev     # desktop window against the dev server (run npm start f
 
 ## Features
 
-- Guide dialog (first visit + Guide button) and a ? help box per section
+- User manual (manual.html, also linked from the app) and a guide per garment (first visit + Guide button), a ? help box per section, and a list of words: underlined terms explain themselves on hover (src/ui/glossary.js)
 - Sources panel: every published figure is cited (src/model/sources.js); own estimates are listed as such
 - Ring presets: common sizes built in; own presets saved in the browser, export/import as ring-presets.json
 - Client form (bra, shirt, trousers): downloads a standalone HTML form for the current garment; the client saves measurements-<garment>-<name>.json, which Open… loads into that garment (construction settings are kept)

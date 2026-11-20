@@ -33,8 +33,8 @@ export const SOURCES = {
     publisher: 'M.A.I.L. article 647',
     url: 'https://www.mailleartisans.org/articles/articledisplay.php?key=647',
     quotes: [
-      'E4-1 swatch, wire 0.063″, ID 0.346″ (AR 5.5): 14 rings over 5 113/128″ along the rows, 13 columns over 3 11/32″.',
-      'Our default E4-1 ring spacing (1.21 × ID along a row, 0.74 × ID row to row) is scaled from this one swatch.',
+      '4-in-1 swatch, wire 0.063″, ID 0.346″ (AR 5.5): 14 rings over 5 113/128″ along the rows, 13 columns over 3 11/32″.',
+      'Our default 4-in-1 ring spacing (1.21 × ID along a row, 0.74 × ID row to row) is scaled from this one swatch.',
     ],
   },
   mailShirt: {
@@ -52,7 +52,7 @@ export const SOURCES = {
     url: 'https://www.chainmailguy.com/pricing.htm',
     quotes: [
       'Shirt formula in the page script: area in² = (chest + 6) × length + (arm + 4) × sleeve × 2; dress uses overbust + 8.',
-      'E4-1 coverage, e.g. 1/16″ × 1/4″: 2400 rings/ft², 1/16″ × 3/8″: 1200, 14 AWG × 1/2″: 750. "For 6-in-1, double the pricing".',
+      '4-in-1 coverage, e.g. 1/16″ × 1/4″: 2400 rings/ft², 1/16″ × 3/8″: 1200, 14 AWG × 1/2″: 750. "For 6-in-1, double the pricing".',
     ],
   },
   metalDesignz: {
@@ -82,8 +82,8 @@ export const SOURCES = {
 
 /** Things we state without a published source — shown as such in the UI. */
 export const UNSOURCED = [
-  'E6-1 ring spacing (1.1 × ID along a row, 0.45 × ID row to row) — our rough estimate, calibrate with a swatch.',
-  'Behaviour above AR 6 (E4-1) and above AR 6.5 (E6-1) — no published limit found; described as "more open" only.',
+  '6-in-1 ring spacing (1.1 × ID along a row, 0.45 × ID row to row) — our rough estimate, calibrate with a swatch.',
+  'Behaviour above AR 6 (4-in-1) and above AR 6.5 (6-in-1) — no published limit found; described as "more open" only.',
   'The cup model (flat triangles, fold at M) — derived from the reference bra, not yet checked against a fitted garment.',
 ];
 

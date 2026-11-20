@@ -21,13 +21,13 @@ const COPY = {
     title: 'Measurements for your chainmail shirt',
     need: 'You need a soft tape measure and, ideally, a helper for the lengths along the back and arms.',
     step1: '1 · Where to measure',
-    how: 'Wear what you will wear under the mail (shirt or padded jacket). Stand upright, arms relaxed. Girths snug but not pulling — the maker adds the ease.',
+    how: 'Wear what you will wear under the mail (shirt or padded jacket). Stand upright, arms relaxed. Girths snug but not pulling — don’t add anything; the maker allows room to move.',
   },
   trousers: {
     title: 'Measurements for your chainmail trousers',
     need: 'You need a soft tape measure and, ideally, a helper for the lengths down the legs.',
     step1: '1 · Where to measure',
-    how: 'Wear what you will wear under the mail. Stand upright, feet slightly apart. Girths snug but not pulling — the maker adds the ease.',
+    how: 'Wear what you will wear under the mail. Stand upright, feet slightly apart. Girths snug but not pulling — don’t add anything; the maker allows room to move.',
   },
 };
 

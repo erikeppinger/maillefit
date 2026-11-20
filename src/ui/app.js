@@ -4,7 +4,8 @@ import { rowHint } from '../model/triangleCup.js';
 import { SOURCES, SOURCE_ORDER, UNSOURCED, sourceNumber } from '../model/sources.js';
 import { MEASUREMENTS, POINTS } from './measurements.js';
 import { drawGuide, highlightGuide, guideNumber, drawPattern, highlightRow } from './diagrams.js';
-import { GUIDE_STEPS, SECTION_HELP } from './help.js';
+import { GUIDES, SECTION_HELP } from './help.js';
+import { term, glossaryText, glossaryHtml } from './glossary.js';
 import { buildClientForm, CLIENT_FILE_TYPE } from './clientForm.js';
 import { isGarment, buildGarmentForm, showGarmentGuide, renderGarment } from './garmentUI.js';
 import { GARMENT_FIELDS } from './garmentDefs.js';
@@ -256,7 +257,7 @@ function syncInputs() {
   $('#measureList').classList.toggle('separate', !!state.client.separateSides);
   $('#measureList').dataset.gapfrom = state.client.gapFrom || 'nipples';
   document.body.dataset.garment = state.garment;
-  $('#mainRingTitle').textContent = state.garment === 'bra' ? 'Cup panels — European 4-in-1' : 'Rings — European 4-in-1';
+  $('#mainRingTitle').innerHTML = `${state.garment === 'bra' ? 'Cup panels' : 'Rings'} — ${term('e41', 'European 4-in-1')}`;
   $$('button[data-garment]').forEach(b => b.classList.toggle('on', b.dataset.garment === state.garment));
 }
 
@@ -271,8 +272,26 @@ function renderStatic() {
       s.quotes.map(q => `<span class="q">${q}</span>`).join('') + '</li>';
   }).join('');
   $('#unsourcedList').innerHTML = UNSOURCED.map(u => `<li>${u}</li>`).join('');
-  $('#guideSteps').innerHTML = GUIDE_STEPS.map(s => `<li><b class="t">${s.title}</b>${s.text}</li>`).join('');
-  $$('[data-help-box]').forEach(b => { if (SECTION_HELP[b.dataset.helpBox]) b.innerHTML = SECTION_HELP[b.dataset.helpBox]; });
+  $$('[data-help-box]').forEach(b => { if (typeof SECTION_HELP[b.dataset.helpBox] === 'string') b.innerHTML = SECTION_HELP[b.dataset.helpBox]; });
+  // static words in index.html get their explanation from the glossary
+  $$('abbr.term:not([title])').forEach(a => { a.title = glossaryText(a.dataset.term); a.tabIndex = 0; });
+  $('#glossaryList').innerHTML = glossaryHtml();
+}
+
+/** The guide dialog for the garment in use. */
+function renderGuide() {
+  const g = GUIDES[state.garment] || GUIDES.bra;
+  $('#guideTitle').textContent = g.title;
+  $('#guideSteps').innerHTML = g.steps.map(s => `<li><b class="t">${s.title}</b>${s.text}</li>`).join('');
+}
+
+/** Open the glossary, scrolled to one word (or at the top). */
+function openGlossary(id) {
+  const dlg = $('#glossaryDialog');
+  if ($('#guideDialog').open) $('#guideDialog').close();
+  if (!dlg.open) dlg.showModal();
+  $$('#glossaryList dt').forEach(dt => dt.classList.toggle('on', dt.id === `term-${id}`));
+  if (id) $(`#term-${id}`)?.scrollIntoView({ block: 'center' });
 }
 
 function card(k, v, s, level = '') {
@@ -302,12 +321,12 @@ function render() {
   $('#cards').innerHTML =
     card('Rings to order', r.totalOrder.toLocaleString(), `${r.net.toLocaleString()} + ${c.spare}% spare, ${r.order.length} size${r.order.length > 1 ? 's' : ''}`) +
     card('Finished weight', grams(r.mass), 'rings only') +
-    card('Aspect ratios', Object.values(r.sets).filter(s => !s.same || s.key === 'main').map(s => s.stats.ar.toFixed(1)).join(' / '),
-      worst === 'good' ? 'all rings suit their weave' : 'see the ring section', worst) +
-    card('Hardware', `${r.hardware.oRings} O-rings`, `${len(r.hardware.ribbon)} ribbon`) +
+    card(term('ar', 'Aspect ratios'), Object.values(r.sets).filter(s => !s.same || s.key === 'main').map(s => s.stats.ar.toFixed(1)).join(' / '),
+      worst === 'good' ? 'all rings suit their weave' : 'see the Rings section', worst) +
+    card('Other parts', `${r.hardware.oRings} O-rings`, `${len(r.hardware.ribbon)} ribbon`) +
     card('Cup size (approx.)', r.body.cupLetter + cite('en13402'), `EU · bust − underbust ${fmt('body', r.body.bustMinusUnder)}`);
 
-  $('#warnings').innerHTML = r.warnings.map(w => `<div class="warn-box">${w}</div>`).join('');
+  $('#warnings').innerHTML = r.warnings.map(w => `<div class="warn-box">${w[0].toUpperCase() + w.slice(1)}</div>`).join('');
 
   drawPattern($('#pattern'), r, c);
   renderBraTables(r);
@@ -320,15 +339,15 @@ function renderRingInfo(r) {
   for (const [key, s] of Object.entries(r.sets)) {
     const verdict = `<span class="lv ${s.verdict.level}">${s.verdict.text}</span>${cite(...s.verdict.src)}`;
     $(`[data-ringinfo="${key}"]`).innerHTML = s.same && key !== 'main'
-      ? `Uses the panel rings — AR ${s.stats.ar.toFixed(2)} for ${s.weave.name}: ${verdict}`
-      : `AR <b>${s.stats.ar.toFixed(2)}</b> for ${s.weave.name}: ${verdict}<br>` +
-        `OD <b>${fmt('ring', s.stats.od)}</b> · ${s.stats.mass.toFixed(3)} g per ring · usually sold in ${s.material.gauge}`;
+      ? `Uses the cup rings — ${term('ar', 'aspect ratio')} ${s.stats.ar.toFixed(2)} for ${s.weave.name}: ${verdict}`
+      : `${term('ar', 'Aspect ratio')} <b>${s.stats.ar.toFixed(2)}</b> for ${s.weave.name}: ${verdict}<br>` +
+        `${term('od', 'Outer diameter')} <b>${fmt('ring', s.stats.od)}</b> · ${s.stats.mass.toFixed(3)} g per ring · wire usually sold in ${term('gauge', s.material.gauge)} sizes`;
   }
-  const pitchLine = (p, strip, src) => `Along a row <b>${fmt('ring', p.along)}</b> per ring` +
+  const pitchLine = (p, strip, src) => `${term('spacing', 'Ring spacing')} along a row <b>${fmt('ring', p.along)}</b>` +
     (strip ? '' : ` · row to row <b>${fmt('ring', p.across)}</b> · ${Math.round(10000 / (p.along * p.across))} rings per 10 × 10 cm`) +
     ` · <i>${p.source}</i>${p.source.startsWith('swatch') ? '' : cite(...src)}`;
-  $('#pitchMain').innerHTML = 'E4-1: ' + pitchLine(r.mainPitch, false, ['mailRpi']);
-  $('#pitchSupport').innerHTML = 'E6-1: ' + pitchLine(r.supportPitch, true, []);
+  $('#pitchMain').innerHTML = '4-in-1: ' + pitchLine(r.mainPitch, false, ['mailRpi']);
+  $('#pitchSupport').innerHTML = '6-in-1: ' + pitchLine(r.supportPitch, true, []);
 }
 
 function renderBraTables(r) {
@@ -352,18 +371,18 @@ function renderBraTables(r) {
   const lr = fn => (r.separate ? `L ${fn(L)} · R ${fn(R)}` : fn(L));
   const row = (k, v) => `<tr><td>${k}</td><td class="n">${v}</td></tr>`;
   $('#geometry').innerHTML = '<tbody>' +
-    row('Fold at the stitch end M (cup curve)', lr(x => `${Math.max(0, Math.round(x.cup.layout.dartDeg))}°`)) +
+    row('Cup curve (fold at M)', lr(x => `${Math.max(0, Math.round(x.cup.layout.dartDeg))}°`)) +
     row('Upper triangle: rows × widest row', lr(x => `${x.cup.triangles[0].rows.length} × ${x.cup.triangles[0].rows[0]?.rings ?? 0}`)) +
     row('Lower triangle: rows × widest row', lr(x => `${x.cup.triangles[1].rows.length} × ${x.cup.triangles[1].rows[0]?.rings ?? 0}`)) +
-    row('Stitch', lr(x => `${fmt('body', x.cup.stitch.length)}, ${x.cup.stitch.rings} rings`)) +
-    row('Neckline (6-in-1) per cup', lr(x => fmt('body', x.cup.neckline))) +
+    row(term('stitch', 'Stitch S → M'), lr(x => `${fmt('body', x.cup.stitch.length)}, ${x.cup.stitch.rings} rings`)) +
+    row('6-in-1 neckline, each cup', lr(x => fmt('body', x.cup.neckline))) +
     row('Side band length, each', fmt('body', r.sides.length)) +
     row(r.bridge.fromNipples ? 'Gap between the cups (from nipple to nipple)' : 'Gap between the cups (measured)', fmt('body', r.bridge.wanted)) +
-    row('Bridge as woven', r.bridge.style === 'rows'
+    row(term('bridge', 'Bridge'), r.bridge.style === 'rows'
       ? `${r.bridge.vertical} vertical rows × ${r.bridge.rows} rings = ${fmt('body', r.bridge.gap)} wide`
       : r.bridge.style === 'ring' ? `one connecting ring, ≈ ${fmt('body', r.bridge.gap)}` : 'cups touch') +
-    row('Bust − chest above', fmt('body', r.body.bustMinusHigh)) +
-    row('Rings per cup: rows / area check', lr(x => `${x.cup.rings} / ${Math.round(x.cup.ringsByArea)}`)) +
+    row('Bust minus chest above the breasts', fmt('body', r.body.bustMinusHigh)) +
+    row('Rings per cup: counted row by row / estimated from the area', lr(x => `${x.cup.rings} / ${Math.round(x.cup.ringsByArea)}`)) +
     '</tbody>';
 
   // row-by-row tables for one cup (tabs when the sides differ)
@@ -380,7 +399,7 @@ function renderBraTables(r) {
     `<tr><th>Row</th><th class="n">Rings</th><th>What to do</th></tr></thead><tbody>` +
     t.rows.map(x => `<tr data-row="${hlSide}-${t.key}-${x.index}"><td>${x.index}</td><td class="n">${x.rings}</td><td class="muted">${rowHint(x, t.edges)}</td></tr>`).join('') +
     `<tr class="total"><td>Total</td><td class="n">${t.rings}</td><td></td></tr></tbody>`).join('') +
-    `<tbody><tr class="total"><td>Stitch</td><td class="n">${cup.stitch.rings}</td><td class="muted">connector rings joining the first rows of both triangles, 4-in-1 style</td></tr></tbody>`;
+    `<tbody><tr class="total"><td>Stitch</td><td class="n">${cup.stitch.rings}</td><td class="muted">rings that join the first rows of both triangles, 4-in-1 style</td></tr></tbody>`;
 }
 
 function update() {
@@ -415,7 +434,7 @@ function showGuide(key) {
   $$('#measureList label').forEach(l => l.classList.toggle('hl', l.dataset.guide === key));
   const m = MEASUREMENTS.find(x => x.key === key);
   $('#guideHow').innerHTML = m
-    ? `<b>${guideNumber(key)}. ${m.label}</b> — ${m.how}`
+    ? `<b>${guideNumber(key)}. ${m.label}</b> — ${m.how}${m.note ? ` <span class="muted">${m.note}</span>` : ''}`
     : 'Click a measurement field (or a number in the drawing) to see where and how to measure it.';
 }
 
@@ -501,7 +520,20 @@ function bind() {
   $('#btnPrint').addEventListener('click', () => window.print());
 
   // guide + section help
-  $('#btnGuide').addEventListener('click', () => $('#guideDialog').showModal());
+  $('#btnGuide').addEventListener('click', () => { renderGuide(); $('#guideDialog').showModal(); });
+  // the desktop app has no tabs: open the manual in the same window (it links back)
+  if (window.__TAURI__) $$('a[href="manual.html"]').forEach(a => a.removeAttribute('target'));
+  $('#openGlossary').addEventListener('click', e => { e.preventDefault(); openGlossary(null); });
+  // any underlined word: click (or Enter) opens its glossary entry
+  const termClick = e => {
+    const t = e.target.closest?.('abbr.term');
+    if (!t || (e.type === 'keydown' && e.key !== 'Enter')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    openGlossary(t.dataset.term);
+  };
+  document.addEventListener('click', termClick, true);
+  document.addEventListener('keydown', termClick, true);
   $$('.help-btn').forEach(b => b.addEventListener('click', e => {
     e.preventDefault(); // don't toggle the surrounding <details>
     const box = $(`[data-help-box="${b.dataset.help}"]`);
@@ -566,6 +598,7 @@ render();
 // first visit: show the guide once
 try {
   if (!localStorage.getItem(SEEN_GUIDE_KEY)) {
+    renderGuide();
     $('#guideDialog').showModal();
     localStorage.setItem(SEEN_GUIDE_KEY, '1');
   }

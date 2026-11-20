@@ -73,7 +73,7 @@ export function tubeSteps(tube) {
 
 export function stepText(st) {
   if (!st.change) return `rounds ${st.from}–${st.to}: ${st.endRings} rings each`;
-  const word = st.change > 0 ? 'expand' : 'contract';
-  const every = st.every >= 1.5 ? `1 about every ${Math.round(st.every)} rounds` : `${Math.round(1 / st.every)} per round`;
+  const word = st.change > 0 ? 'add' : 'leave out';
+  const every = st.every >= 1.5 ? `1 ring about every ${Math.round(st.every)} rounds` : `${Math.round(1 / st.every)} rings in every round`;
   return `rounds ${st.from}–${st.to}: ${st.startRings} → ${st.endRings} rings (${word} ${every})`;
 }

@@ -100,7 +100,7 @@ export function drawPattern(svg, r, construction) {
   const strapStub = construction.straps ? 30 : 0;
   const pad = 14;
   const minX = Math.min(...xs) - pad, maxX = Math.max(...xs) + pad;
-  const top = Math.max(...ys) + strapStub + pad;
+  const top = Math.max(...ys, 0) + strapStub + pad; // T can end up below S with impossible measurements
   svg.setAttribute('viewBox', [minX, -top, maxX - minX, top + pad + 18].map(f).join(' '));
 
   const ringR = p.along * 0.44, sw = Math.max(0.3, r.sets.main.spec.wd * 0.6);
