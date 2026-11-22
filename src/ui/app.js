@@ -509,6 +509,7 @@ function bind() {
         if (data.notes) alert(`Notes from ${data.name}:\n\n${data.notes}`);
       } else {
         state = merge(structuredClone(DEFAULT_PROJECT), data);
+        if (isGarment(state.garment)) buildGarmentForm(state.garment);
       }
       syncInputs();
       update();

@@ -19,7 +19,7 @@ export const GARMENT_FIELDS = {
       { key: 'neck', label: 'Neck girth', how: 'Around the base of the neck. Sets the neck opening and the collar.' },
     ],
     construction: [
-      { path: 'sleeveStyle', label: 'Sleeves', kind: 'select', options: [['t', 'T-style — no seams (most common)'], ['45', '45° sleeves — 4 short shoulder seams, neater taper']] },
+      { path: 'sleeveStyle', label: 'Sleeves', kind: 'select', options: [['t', 'T-style — no seams (most common)'], ['45', '45° sleeves — 4 shoulder seams']] },
       { path: 'ease.body', label: `${term('ease', 'Ease')}, body`, kind: 'body' },
       { path: 'ease.arm', label: 'Ease, sleeves', kind: 'body' },
       { path: 'backExtra', label: 'Back wider than front by', kind: 'body' },
